@@ -109,6 +109,7 @@ class ItemsRepository(BaseRepository):  # noqa: WPS214
         limit: int = 20,
         offset: int = 0,
         requested_user: Optional[User] = None,
+        title:Optional[str]
     ) -> List[Item]:
         query_params: List[Union[str, int]] = []
         query_params_count = 0
@@ -136,7 +137,11 @@ class ItemsRepository(BaseRepository):  # noqa: WPS214
             ),
         )
         # fmt: on
-
+        if title:
+            query = query.where(
+                items.title.ilike('%' + title + '%')
+            )
+        # fmt: on
         if tag:
             query_params.append(tag)
             query_params_count += 1
